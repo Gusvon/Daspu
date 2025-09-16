@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia TCC | Apoio para a Reta Final</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #FFFFFF;
+      --foreground: #18181b;
+      --muted-foreground: #71717a;
+      --border: #e4e4e7;
+      --card-bg: #FFFFFF;
+      --accent: #3B82F6;
+      --card-hover: #f5f5f5;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, h3, .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+    .tab-button {
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+      padding-bottom: 8px;
+    }
+    .tab-active {
+      color: var(--foreground);
+      border-bottom-color: var(--accent);
+    }
+    .accordion-toggle {
+      transition: background-color 0.2s ease-in-out;
+      border-radius: 0.5rem;
+    }
+    .accordion-toggle:hover {
+      background-color: var(--card-hover);
+    }
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+    .accordion-item.active .accordion-content { max-height: 4000px; }
+    .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .checklist-item label:has(input:checked) {
+      text-decoration: line-through;
+      color: var(--muted-foreground);
+    }
+    .editable-section {
+        min-height: 200px;
+        padding: 1.5rem;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        outline: none;
+        line-height: 1.7;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .editable-section:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .editable-title {
+        outline: none;
+    }
+    .editable-title:focus {
+        background-color: var(--card-hover);
+    }
+    .editable-placeholder {
+        color: var(--muted-foreground);
+        font-style: italic;
+    }
+    .callout {
+      padding: 1rem;
+      border-left-width: 4px;
+      border-radius: 0.25rem;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    .callout-danger {
+      background-color: #fef2f2;
+      border-color: #ef4444;
+      color: #b91c1c;
+    }
+    .callout-warning {
+      background-color: #fffbeb;
+      border-color: #eab308;
+      color: #a16207;
+    }
+    /* Estilo para a tabela */
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    .styled-table thead tr {
+        background-color: #f4f4f5;
+        color: var(--foreground);
+        text-align: left;
+    }
+    .styled-table th, .styled-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid var(--border);
+    }
+    .styled-table tbody tr {
+        background-color: var(--card-bg);
+        transition: background-color 0.2s ease-in-out;
+    }
+    .styled-table tbody tr:hover {
+        background-color: var(--card-hover);
+    }
+  </style>
+</head>
+<body class="text-foreground">
+
+  <header class="border-b border-[var(--border)]">
+    <div class="container mx-auto px-6 py-10 text-center">
+      <h1 class="text-5xl md:text-6xl font-bold font-serif">Orientação para o TCC</h1>
+      <p class="text-[var(--muted-foreground)] mt-4 text-lg">Alguma coisa acontece no meu coração.</p>
+    </div>
+  </header>
+
+  <nav class="py-3 bg-[var(--background)] border-b border-[var(--border)]">
+    <div class="container mx-auto px-4">
+      <div id="tabs" class="flex justify-center space-x-4 sm:space-x-8 overflow-x-auto no-scrollbar">
+      </div>
+    </div>
+  </nav>
+
+  <main id="content" class="container mx-auto p-4 sm:p-6 md:p-8">
+  </main>
+
+  <footer class="text-center py-10 px-4 mt-8 border-t border-[var(--border)]">
+    <p class="text-[var(--muted-foreground)]">Desenvolvido com ❤️ para a melhor namorada do mundo.</p>
+  </footer>
+
+  <script>
+    function getEstruturaContent(item) {
+        const content = {
+            'Capa': `<p><strong>A Missão:</strong> É a identidade visual. Deve ser limpa, direta e formal. Contém apenas as informações essenciais para identificação imediata.</p><div class="callout callout-danger"><p><strong>Armadilha Comum:</strong> Poluir a capa com informações que pertencem à folha de rosto (nome do orientador, curso, etc.). A capa é minimalista por um motivo: clareza.</p></div>`,
+            'Folha de Rosto': `<p><strong>A Missão:</strong> É a 'certidão de nascimento' do seu TCC. Ela repete os elementos da capa, mas adiciona os detalhes técnicos que oficializam o trabalho no contexto académico.</p><h4 class="font-semibold text-foreground mt-4 mb-2">O que deve conter:</h4><ul class="list-disc list-inside space-y-1"><li>Todos os elementos da Capa</li><li><strong>+ Natureza do Trabalho:</strong> Um pequeno texto que explica o que é o documento e para qual finalidade.</li><li><strong>+ Nome do Orientador(a):</strong> E coorientador(a), se houver.</li></ul>`,
+            'Resumo': `<p><strong>A Missão:</strong> É o "trailer" do seu TCC. Em um único parágrafo, você conta a história completa: qual era o cenário, o que quis descobrir, como fez, o que encontrou e qual a grande lição.</p><div class="callout callout-warning"><p>⚡ <strong>Dica de Mestre:</strong> Escreva o resumo por ÚLTIMO. Tentar resumi-lo antes de estar pronto é como fazer o trailer de um filme que ainda não foi gravado.</p></div>`,
+            'Sumário': `<p><strong>A Missão:</strong> É o GPS do seu leitor. Ele lista todos os capítulos e seções, indicando exatamente onde encontrar cada parte da sua história.</p><div class="callout callout-warning"><p>⚡ <strong>Dica de Mestre:</strong> NUNCA faça o sumário manualmente! Use os estilos de formatação ("Título 1", "Título 2") do seu editor de texto. A mágica acontece automaticamente.</p></div>`,
+            'Introdução': `<p><strong>A Missão:</strong> É a porta de entrada e o mapa do seu TCC. Ela precisa fisgar a atenção do leitor, dizer a ele o que será investigado, por que isso é importante e como a investigação será conduzida.</p><h4 class="font-semibold text-foreground mt-4 mb-2">Roteiro de uma boa introdução:</h4><ul class="list-disc list-inside space-y-1"><li>Contextualização do tema</li><li>Problema de pesquisa (a grande pergunta)</li><li>Justificativa (a relevância)</li><li>Objetivos (geral e específicos)</li><li>Estrutura dos capítulos</li></ul>`,
+            'Revisão de Literatura': `<p><strong>A Missão:</strong> Mostrar que você "fez o dever de casa". Aqui, você estabelece um diálogo com os principais autores da sua área, construindo uma base sólida para a sua própria análise.</p>`,
+            'Metodologia': `<p><strong>A Missão:</strong> Dar credibilidade científica ao seu trabalho. Você vai descrever a "receita do bolo" da sua pesquisa com tanta clareza que qualquer outra pessoa poderia refazer seu caminho.</p>`,
+            'Resultados e Discussão': `<p><strong>A Missão:</strong> Este é o clímax. Aqui você apresenta seus achados (Resultados) e, mais importante, os interpreta à luz da teoria (Discussão), respondendo à sua pergunta inicial.</p>`,
+            'Considerações Finais': `<p><strong>A Missão:</strong> É o "gran finale". Você amarra as pontas soltas, retoma sua pergunta, sintetiza suas conclusões e sugere caminhos para futuras pesquisas.</p>`,
+            'Referências': `<p><strong>A Missão:</strong> Listar, em ordem alfabética, todas as obras que você <strong>citou</strong> no texto. É a prova de que sua pesquisa tem fundamento.</p><div class="callout callout-danger"><p><strong>Armadilha Comum:</strong> Listar obras que você leu, mas não citou no texto (isso seria "Bibliografia"). ABNT exige "Referências", apenas o que foi usado.</p></div>`,
+        };
+        return content[item] || '';
+    }
+    
+    function getAbntContent(section) {
+        const content = {
+            'formatacao': `<p>Estas são as regras que se aplicam a todo o corpo do seu texto. Configure isso no seu editor antes de começar a escrever.</p>
+            <div class="space-y-1 mt-4">
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Fonte<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>Arial ou Times New Roman. O importante é usar a mesma do início ao fim.</p></div></div>
+                </div>
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Tamanho da Fonte<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p><strong>Tamanho 12</strong> para todo o texto, incluindo títulos. A exceção são "textos de apoio" como citações longas e notas de rodapé (<strong>tamanho 10</strong>).</p></div></div>
+                </div>
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Margens<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>A regra é 3-3-2-2, pensando no espaço para encadernação. <strong>Superior e Esquerda: 3 cm</strong>. <strong>Inferior e Direita: 2 cm</strong>.</p></div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Parágrafo e Espaçamento<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p><strong>Espaçamento entre linhas: 1,5</strong>. O <strong>alinhamento</strong> deve ser <strong>Justificado</strong>. Cada parágrafo deve começar com um <strong>recuo de 1,25 cm</strong>.</p></div></div>
+                </div>
+            </div>`,
+            'secoes': `<div class="space-y-1 mt-4">
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Capa e Folha de Rosto<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>Ambas devem ter os elementos centralizados. A <strong>Folha de Rosto</strong> inclui a "Natureza do Trabalho" e o nome do orientador, recuados à direita.</p></div></div>
+                </div>
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Resumo<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>Deve ser escrito em um <strong>único parágrafo</strong>, com espaçamento simples. Abaixo, vêm as <strong>Palavras-chave</strong>.</p></div></div>
+                </div>
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Sumário<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>O título "Sumário" é centralizado. Os itens são alinhados à esquerda. Use a função automática do seu editor!</p></div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Títulos das Seções<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>Devem usar a <strong>numeração progressiva</strong> (ex: 1. INTRODUÇÃO, 2.1 Subseção). Títulos primários (1, 2, 3...) são em caixa alta e negrito.</p></div></div>
+                </div>
+            </div>`,
+            'citacoes': `<p>Citar é como mostrar com quem você "conversou" para escrever. É essencial para dar crédito e evitar plágio.</p>
+            <div class="space-y-1 mt-4">
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Citação Indireta (com suas palavras)<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>Ex: Segundo Lipovetsky (2009), a moda reflete as transformações sociais.</p></div></div>
+                </div>
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Citação Direta Curta (até 3 linhas)<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>Ex: Para Goffman (1988, p. 5), o estigma é a situação do indivíduo que está "inabilitado para a aceitação social plena".</p></div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Citação Direta Longa (mais de 3 linhas)<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><p>Parágrafo separado com <strong>recuo de 4 cm</strong> da margem esquerda, <strong>fonte tamanho 10</strong> e <strong>espaçamento simples</strong>. Sem aspas.</p></div></div>
+                </div>
+            </div>`,
+            'referencias': `<p>A lista final, em <strong>ordem alfabética</strong>, de todas as obras que você citou. O alinhamento é à <strong>esquerda</strong> e o espaçamento é <strong>simples</strong>.</p>
+            <div class="space-y-1 mt-4">
+                <div class="accordion-item border-b border-[var(--border)]">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Livro<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><div class="relative p-4 bg-gray-100 border border-[var(--border)] rounded-md"><p class="abnt-example">SOBRENOME, Nome. <strong>Título em negrito:</strong> subtítulo. Cidade: Editora, ano.</p></div></div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left font-semibold text-foreground text-lg">Artigo de Revista<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button>
+                    <div class="accordion-content"><div class="p-4 text-[var(--muted-foreground)]"><div class="relative p-4 bg-gray-100 border border-[var(--border)] rounded-md"><p class="abnt-example">SOBRENOME, Nome. Título do artigo. <strong>Nome da Revista</strong>, Cidade, v. X, n. X, p. X-X, mês. ano.</p></div></div></div>
+                </div>
+            </div>
+            <div class="callout callout-warning mt-6"><p>⚡ <strong>Dica de Ouro:</strong> Use a ferramenta de citações do Google Docs (em Ferramentas > Citações) para formatar tudo automaticamente!</p></div>`
+        };
+        return content[section] || '';
+    }
+
+    const checklistItems = {
+        fase1: [{ id: "reuniao", text: "Marcar a primeira reunião com o(a) orientador(a)." },{ id: "definir_tema", text: "Definir o Tema, Problema de Pesquisa e Objetivos." },{ id: "cronograma", text: "Criar um cronograma de entregas junto com o(a) orientador(a)." },{ id: "esboco", text: "Esboçar a estrutura de capítulos do trabalho." }],
+        fase2: [{ id: "bibliografia", text: "Levantar a bibliografia principal (livros, artigos)." },{ id: "fichamento", text: "Fazer o fichamento dos textos mais importantes." },{ id: "escrever_ref", text: "Escrever a primeira versão do Referencial Teórico." },{ id: "enviar_ref", text: "Enviar o Referencial Teórico para o(a) orientador(a)." }],
+        fase3: [{ id: "escrever_met", text: "Definir e escrever a Metodologia." },{ id: "coletar_dados", text: "Coletar os dados (imagens, documentos, etc.)." },{ id: "escrever_analise", text: "Escrever o capítulo de Análise e Discussão." },{ id: "enviar_analise", text: "Enviar Metodologia e Análise para o(a) orientador(a)." }],
+        fase4: [{ id: "escrever_intro", text: "Escrever a versão final da Introdução." },{ id: "escrever_conclusao", text: "Escrever as Considerações Finais." },{ id: "escrever_resumo", text: "Escrever o Resumo e definir Palavras-chave." },{ id: "enviar_completo", text: "Enviar a primeira versão completa do TCC." }],
+        fase5: [{ id: "revisar_gramatica", text: "Revisar a gramática e a ortografia do texto." },{ id: "formatar_abnt", text: "Formatar todo o documento nas normas ABNT." },{ id: "verificar_refs", text: "Verificar todas as citações e a lista de Referências." },{ id: "gerar_sumario", text: "Gerar o Sumário automático pela última vez." }],
+        fase6: [{ id: "preparar_slides", text: "Preparar os slides para a apresentação da banca." },{ id: "ensaiar_apres", text: "Ensaiar a apresentação e cronometrar o tempo." },{ id: "entregar_final", text: "Entregar a versão final do TCC para a banca." },{ id: "apresentar", text: "Apresentar o trabalho com confiança!" },{ id: "comemorar", text: "Comemorar muito a aprovação! 🎉", special: true }]
+    };
+
+    // --- CONTENT FOR EACH TAB ---
+    const tabContents = {
+      checklist: `
+        <section>
+          <div class="max-w-4xl mx-auto">
+            <header class="text-center pb-8 mb-12 border-b border-[var(--border)]">
+                <h2 class="text-4xl font-bold font-serif">Checklist Interativo do TCC</h2>
+                <p class="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">A jornada do TCC é uma maratona. Use este checklist para marcar cada pequena vitória e visualizar seu progresso. Nenhuma etapa será esquecida!</p>
+            </header>
+            <div class="space-y-1 max-w-3xl mx-auto p-4 md:p-6 bg-[var(--card-bg)] rounded-xl shadow-md">
+            
+              <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">Fase 1: Planejamento e Estrutura Inicial<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2"><ul class="space-y-4" id="checklist-fase1"></ul></div></div></div>
+              <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">Fase 2: Pesquisa e Construção Teórica<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2"><ul class="space-y-4" id="checklist-fase2"></ul></div></div></div>
+              <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">Fase 3: O Coração da Pesquisa (Análise)<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2"><ul class="space-y-4" id="checklist-fase3"></ul></div></div></div>
+              <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">Fase 4: Escrita e Amarração do Texto<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2"><ul class="space-y-4" id="checklist-fase4"></ul></div></div></div>
+              <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">Fase 5: Revisão e Formatação Final<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2"><ul class="space-y-4" id="checklist-fase5"></ul></div></div></div>
+              <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">Fase 6: A Reta Final (Banca e Entrega)<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2"><ul class="space-y-4" id="checklist-fase6"></ul></div></div></div>
+
+            </div>
+          </div>
+        </section>
+      `,
+      dossie: `
+        <section class="prose max-w-none text-base">
+          <div class="max-w-4xl mx-auto p-4 md:p-6 bg-[var(--card-bg)] rounded-xl shadow-md">
+            <header class="text-center pb-8 mb-12 border-b border-[var(--border)]">
+                <h2 class="text-4xl font-bold font-serif text-[var(--foreground)]">Daspu e Gabriela Leite: Uma Análise da Moda como Ferramenta de Ativismo Político</h2>
+                <p class="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">Um guia de pesquisa focado, com os principais marcos e conceitos sobre a marca que revolucionou a moda e o ativismo no Brasil.</p>
+            </header>
+            <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] mt-8 mb-4">Introdução: Uma Grife Chamada "Puta" - A Improvável Interseção entre Moda e Ativismo</h3>
+            <p>No panteão da moda brasileira, poucas marcas surgiram de forma tão explosiva, controversa e politicamente carregada quanto a Daspu. Lançada em 2005, a grife transcendeu o conceito de vestuário para se tornar um projeto sociocultural radical, uma intervenção deliberada tanto na indústria da moda quanto no discurso público sobre trabalho sexual, moralidade e direitos humanos no Brasil.1 A Daspu não foi concebida para simplesmente vestir corpos, mas para despir a hipocrisia social, utilizando as ferramentas da cultura de consumo — branding, espetáculo midiático e o poder simbólico da roupa — para desafiar o estigma, reivindicar cidadania e dar uma voz potente e irreverente a uma das comunidades mais marginalizadas da sociedade: as prostitutas.3</p>
+            <p>A marca representa uma mudança de paradigma no ativismo social. Em vez de rejeitar frontalmente os mecanismos do capitalismo e da mídia, a Daspu os cooptou, apropriando-se de sua linguagem para subvertê-los por dentro. A moda, frequentemente criticada por sua superficialidade e por perpetuar a objetificação feminina, foi ressignificada como uma arma de guerrilha semiótica. A passarela transformou-se em palanque, a camiseta em manifesto e o desfile em ato político.4 Esta estratégia sofisticada demonstrou uma compreensão aguçada de que, na sociedade contemporânea, a visibilidade midiática é uma forma de poder, e a controvérsia, um catalisador para o debate público.</p>
+            <p>No centro desta revolução improvável estava sua criadora, Gabriela Leite, uma figura cuja trajetória pessoal encapsula as contradições e a complexidade do movimento que liderou.6 Ex-estudante de sociologia da Universidade de São Paulo (USP), prostituta por escolha e ativista por necessidade, Leite foi a arquiteta intelectual e espiritual por trás da Daspu e de sua organização-mãe, a ONG Davida.8 A grife, com seu nome provocador — uma paródia direta da luxuosa e então sitiada Daslu —, foi a culminação de décadas de luta, uma ferramenta projetada para financiar o ativismo e, mais importante, para forçar a sociedade brasileira a confrontar suas próprias contradições sobre sexo, trabalho e dignidade.10 Este relatório se propõe a realizar uma análise detalhada e multifacetada da marca Daspu e de sua fundadora, investigando a biografia de Gabriela Leite, a gênese de seu ativismo, a criação estratégica da grife, sua estética de resistência e seu legado duradouro como um dos mais singulares e eficazes exemplos de ativismo cultural na história recente do Brasil.</p>
+
+            <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] mt-8 mb-4">Parte I: A Arquiteta de um Movimento - A Vida e o Ativismo de Gabriela Leite</h3>
+            <p>A história da Daspu é indissociável da biografia de sua idealizadora, Gabriela Leite. Sua jornada pessoal, marcada por uma ruptura radical com as convenções de sua classe social e uma imersão profunda na realidade da prostituição, forneceu a base ideológica e a autenticidade que impulsionaram um movimento nacional. A eficácia de seu ativismo reside precisamente na fusão entre um rigoroso arcabouço intelectual, adquirido em seus anos de universidade, e a legitimidade de uma experiência vivida nas ruas. Ela não era uma observadora externa falando pelas prostitutas; era uma participante ativa, uma intelectual orgânica do movimento, que falava como uma delas, mas com as ferramentas conceituais da sociologia e da teoria dos direitos civis.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">De USP às Ruas: A Escolha Radical de uma Intelectual de Classe Média</h4>
+            <p>Gabriela Silva Leite nasceu em São Paulo, em 22 de abril de 1951, em uma família de classe média, filha de uma dona de casa conservadora e um crupiê.9 No final da década de 1960 e início dos anos 1970, um período de intensa efervescência cultural e repressão política no Brasil, ela era estudante de Filosofia e Ciências Sociais na prestigiosa Universidade de São Paulo (USP).6 Imersa nos círculos da boemia intelectual paulistana, Gabriela levava uma vida que, para muitos, seria o caminho esperado para uma jovem de sua origem: estudos, um emprego em um escritório e um futuro dentro das estruturas sociais estabelecidas.8</p>
+            <p>No entanto, movida por uma profunda inquietação e o que descreveu como uma "curiosidade e o desejo de uma revolução pessoal", ela tomou uma decisão que definiria o resto de sua vida.3 Aos 22 anos, em 1973, Gabriela Leite abandonou a faculdade, o emprego e o conforto de sua vida familiar para se tornar prostituta.7 Sua motivação não foi a necessidade econômica — o fator mais comumente associado à entrada na prostituição —, mas uma escolha consciente e ideológica. Ela buscava uma forma de liberdade e uma ruptura com a vida que considerava restritiva.3 Essa origem, como uma escolha deliberada e não como uma imposição do destino, foi fundamental para a construção de seu discurso político posterior, que combatia veementemente a narrativa da vitimização e defendia a autonomia e o direito de escolha das mulheres.9</p>
+            <p>Sua carreira na prostituição a levou a alguns dos mais notórios epicentros do trabalho sexual no Brasil. Começou na Boca do Lixo, em São Paulo, uma área conhecida por sua marginalidade e efervescência cultural; passou pela zona boêmia de Belo Horizonte e, mais tarde, estabeleceu-se na Vila Mimosa, no Rio de Janeiro.8 Essa imersão em diferentes contextos lhe proporcionou uma compreensão abrangente e nuançada da diversidade de experiências, dos perigos e da complexa estrutura social que envolve a prostituição no país. Foi a partir dessa vivência direta que a semente de seu ativismo começou a germinar.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">A Centelha da Rebelião: Organizando Contra a Violência e pela Dignidade</h4>
+            <p>O catalisador que transformou a experiência pessoal de Gabriela em ação política coletiva foi a violência brutal do Estado. Em 1979, um delegado de polícia linha-dura chamado Wilson Richetti iniciou uma campanha de repressão violenta contra as prostitutas e travestis da Boca do Lixo, em São Paulo.13 A perseguição culminou na tortura e morte de colegas de Gabriela, incluindo uma mulher grávida.13 Diante da indiferença da sociedade e da mídia, ela percebeu que o silêncio era cúmplice da violência.</p>
+            <p>Em resposta, Gabriela Leite organizou a primeira manifestação de prostitutas da história do Brasil.9 O ato, que tomou as ruas do centro de São Paulo, foi um escândalo para a época, quebrando um tabu histórico e colocando a violência policial contra as trabalhadoras do sexo no centro do debate público pela primeira vez. Esse evento marcou sua transição de prostituta a líder ativista.</p>
+            <p>O passo seguinte na consolidação de um movimento nacional ocorreu em 1987, quando ela ousou organizar o Primeiro Encontro Nacional de Prostitutas.3 Este encontro foi um marco, pois começou a tecer uma rede de solidariedade e articulação política entre trabalhadoras do sexo de diferentes partes do país. Pela primeira vez, elas se reuniam não como vítimas passivas, mas como sujeitos políticos, para discutir suas próprias pautas, compartilhar experiências e formular uma agenda comum de reivindicações. A partir desse momento, Gabriela Leite se tornou a principal liderança na luta pelo reconhecimento da prostituição como uma profissão e pela garantia dos direitos civis e trabalhistas para as mulheres que a exerciam.3</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Construindo uma Base: A Criação e a Missão da ONG Davida</h4>
+            <p>Após anos de ativismo informal e organização de base, Gabriela Leite sentiu a necessidade de formalizar a luta em uma estrutura mais permanente e com maior capacidade de interlocução com o Estado e a sociedade. Em 1992, já no Rio de Janeiro, ela fundou a ONG Davida.6 O nome, um jogo de palavras com a expressão "mulheres da vida", era em si um ato de ressignificação, transformando um eufemismo popular em uma afirmação de identidade e agência.15</p>
+            <p>A missão da Davida era clara e multifacetada: lutar pelo reconhecimento legal da prostituição como profissão; promover políticas públicas que reduzissem a vulnerabilidade das prostitutas; combater o estigma, o preconceito e a discriminação; e atuar na prevenção de DSTs e HIV/AIDS, não a partir de uma perspectiva que as via como vetores de doenças, mas como agentes de sua própria saúde.1 A organização se opunha firmemente à ideia de vitimização, defendendo que, para muitas mulheres, a prostituição era uma escolha de trabalho legítima que merecia proteção legal e respeito social.8</p>
+            <p>Desde o início, a Davida adotou uma estratégia inovadora de usar a cultura como principal ferramenta para atrair a atenção da mídia e do mundo político.10 Antes mesmo da Daspu, a ONG já promovia eventos como o "Mulheres Seresteiras" e o "Cabaré da Vida", que utilizavam a música e o teatro para criar comunidade, disseminar informações sobre saúde e, de forma subjacente, construir uma imagem pública positiva e humanizada das prostitutas.14 Essas iniciativas culturais foram o laboratório onde se gestou a ideia de que a arte e a performance poderiam ser veículos mais eficazes para a mensagem política do que os métodos tradicionais de protesto. Foi essa longa trajetória de ativismo cultural que pavimentou o caminho para a criação de sua mais ousada e impactante iniciativa: uma grife de moda.</p>
+
+            <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] mt-8 mb-4">Parte II: O Nascimento da Daspu - Ironia, Controvérsia e Branding Estratégico</h3>
+            <p>A criação da Daspu em 2005 não foi um desvio do ativismo de Gabriela Leite, mas sua extensão lógica e mais audaciosa. A marca nasceu de uma necessidade pragmática, foi batizada por uma piada, ganhou vida através de uma controvérsia midiática e se consolidou como um dos mais brilhantes exemplos de branding ativista do Brasil. O sucesso da Daspu não foi fruto de um plano de marketing meticulosamente elaborado, mas sim de uma estratégia emergente, forjada em tempo real no calor do conflito. A identidade da marca — irônica, desafiadora e anti-establishment — foi definida não apenas por suas criadoras, mas pela reação pública a um ataque legal. A Daslu, ao tentar apagar a Daspu, tornou-se, involuntariamente, sua coautora e principal garota-propaganda.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Um Nome Nascido de uma Piada: A Paródia da Daslu e o Poder da Linguagem</h4>
+            <p>A ideia de criar uma marca de roupas surgiu de uma necessidade concreta: a ONG Davida, apesar de sua relevância política, carecia de uma fonte de financiamento estável e autônoma para seus projetos.10 Em uma das reuniões da ONG, o designer e apoiador da causa, Sylvio de Oliveira, sugeriu, em tom de brincadeira, o nome "Daspu".10 A sugestão era uma paródia direta e mordaz da "Daslu", a mais icônica butique de luxo de São Paulo, frequentada pela elite econômica do país.18</p>
+            <p>A genialidade da piada residia em sua poderosa carga semiótica. "Daslu" era a contração dos nomes de suas fundadoras, Lúcia e Lourdes, evocando um ar de exclusividade e sofisticação.18 "Daspu", por sua vez, era a contração explícita de "Das Putas", uma apropriação direta e orgulhosa do termo usado para estigmatizar. O nome criava um espelho invertido, estabelecendo uma série de dicotomias imediatas e ressonantes: Daslu versus Daspu; luxo versus "lixo"; a elite da moda versus as marginalizadas da rua; a legalidade questionável (a Daslu enfrentava acusações de contrabando e fraude fiscal na época) versus a luta por legalização; a santa versus a puta.5</p>
+            <p>Inicialmente, a sugestão não foi levada a sério.10 Contudo, a força do nome era inegável. Ele encapsulava, em duas sílabas, todo o espírito de irreverência, crítica social e apropriação de linguagem que o movimento de Gabriela Leite representava. Era um nome que não pedia licença, que provocava e que, acima de tudo, era impossível de ignorar.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Julgamento pela Mídia: Como um Processo Judicial Catapultou uma Ideia Incipiente a um Fenômeno Nacional</h4>
+            <p>O lançamento público da Daspu foi tão acidental quanto explosivo. Antes que a ONG Davida pudesse estruturar a ideia, o nome vazou para a imprensa. Em 20 de novembro de 2005, o influente jornalista Elio Gaspari publicou uma nota sobre a "nova grife" em sua coluna no jornal O Globo, sem que Gabriela Leite ou qualquer outra pessoa da ONG tivesse fornecido a informação.10 Acredita-se que alguém ouviu a conversa sobre o nome nas imediações da sede da Davida e a repassou ao jornalista.10 A marca, que até então era apenas um conceito, de repente se tornou notícia nacional.</p>
+            <p>A reação da Daslu foi imediata e hostil. A gigante do luxo moveu uma notificação judicial contra a pequena ONG, ameaçando um processo caso o nome não fosse alterado, alegando que ele denegria sua imagem.3 Essa ação legal, destinada a silenciar a iniciativa, teve o efeito diametralmente oposto. A ameaça de processo transformou uma nota de rodapé em uma manchete nacional, e a história explodiu na mídia.</p>
+            <p>A batalha judicial que se seguiu foi, na verdade, uma batalha de narrativas, e a Daspu venceu de forma avassaladora no tribunal da opinião pública. A mídia e a sociedade em geral se posicionaram massivamente a favor da Daspu, enquadrando o conflito como uma clássica história de Davi contra Golias.10 De um lado, uma corporação milionária, já envolvida em escândalos fiscais, tentando esmagar uma iniciativa de um grupo marginalizado; do outro, um grupo de prostitutas usando humor e criatividade para lutar por seus direitos. A simpatia pública foi tão avassaladora que a Daslu, percebendo o imenso dano à sua imagem, acabou por retirar o processo.10</p>
+            <p>Essa vitória midiática foi o verdadeiro ato de fundação da marca. A controvérsia gerou uma fama instantânea e uma onda de apoio que forçou a ONG Davida a transformar a piada em realidade. O que era apenas uma ideia teve que ser rapidamente estruturado em uma confecção, com coleções, desfiles e um plano de negócios, para capitalizar a atenção e a demanda inesperadas.1 A Daspu nasceu, portanto, não em uma prancheta de design, mas no fogo cruzado da opinião pública.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">O Negócio do Protesto: Estabelecendo uma Marca para Financiar um Movimento</h4>
+            <p>Com a fama consolidada pela controvérsia, a Daspu foi oficialmente lançada em 16 de dezembro de 2005, com um desfile na Praça Tiradentes, no Rio de Janeiro — um local simbólico, conhecido por ser um tradicional ponto de prostituição e centro da boemia carioca.10 O propósito da marca foi estabelecido desde o início como duplo: em primeiro lugar, gerar uma fonte de renda sustentável para financiar as ações da ONG Davida, garantindo sua autonomia econômica 3; em segundo lugar, e talvez mais importante, funcionar como uma plataforma de alta visibilidade para a pauta política do movimento, usando a moda como um megafone.1</p>
+            <p>O modelo de negócios evoluiu rapidamente. A marca começou de forma modesta, vendendo apenas camisetas com frases provocadoras por R$ 20.20 O sucesso, no entanto, impôs uma organização mais complexa. A Daspu passou a desenvolver coleções sazonais, a organizar desfiles que se tornaram eventos de grande repercussão e a diversificar sua linha de produtos, incluindo vestidos, lingeries e moda masculina.17 As vendas, inicialmente locais, expandiram-se para lojas multimarcas e para a internet, através de sua loja virtual, a "Putique Daspu", um nome que mantinha o mesmo espírito irônico e provocador da marca.17 A Daspu provou que o protesto podia ser não apenas uma causa, mas também um produto desejável, transformando o apoio político em um ato de consumo consciente e transgressor.</p>
+
+            <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] mt-8 mb-4">Parte III: A Estética da Resistência - Desconstruindo o Estilo Daspu</h3>
+            <p>A estratégia estética da Daspu foi uma aula magistral de "jujitsu semiótico". A marca não tentou criar uma nova imagem "respeitável" para as prostitutas, dissociando-as dos estereótipos visuais. Pelo contrário, ela mergulhou de cabeça nesses estereótipos, apropriando-se dos códigos visuais e linguísticos usados para estigmatizar as trabalhadoras do sexo e os ressignificou radicalmente. A Daspu pegou os símbolos da vergonha — a roupa provocante, a linguagem sexualmente explícita — e os transformou em emblemas de poder, orgulho e desafio político. Ao habitar, exagerar e recodificar o estereótipo, a marca tomou controle da narrativa, transformando uma estética de marginalização em uma estética de resistência.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">"Vestir-se de Puta": Reivindicando e Politizando o Guarda-Roupa da Prostituta</h4>
+            <p>O princípio estético central da Daspu era a reivindicação e politização do ato de "vestir-se de puta". As coleções, estampas e slogans faziam alusão direta e desinibida ao universo da prostituição.23 Em vez de fugir da imagem da "puta", a marca a abraçou, explorando-a como uma identidade política. Esta abordagem desafiava a lógica de que, para serem respeitadas, as mulheres marginalizadas precisam se conformar aos padrões de decência da sociedade dominante. A Daspu propunha o oposto: o respeito deveria vir da aceitação de sua identidade como ela é, com toda a sua carga transgressora.</p>
+            <p>Essa estratégia gerou um paradoxo fascinante: a moda, uma indústria frequentemente acusada de explorar e objetificar o corpo feminino, foi usada como ferramenta para lutar contra a desumanização das prostitutas. Ao colocar as próprias trabalhadoras do sexo no controle de sua representação — como designers, modelos e porta-vozes —, a Daspu subverteu a dinâmica de poder. O "vestir-se de puta" deixou de ser um rótulo imposto de fora para se tornar uma performance política consciente, um ato de autoafirmação.2</p>
+            <p>Além disso, a marca ampliou o alcance dessa provocação para além da comunidade de trabalhadoras do sexo. Como observou o diretor de marketing da Daspu, Flávio Lenz, "hoje em dia, as patricinhas mesmo se vestem como as prostitutas".21 A Daspu explorou essa zona cinzenta, desafiando todas as mulheres a questionarem as normas de vestimenta e comportamento que lhes são impostas. Vestir uma peça da Daspu tornou-se um ato de solidariedade e uma declaração de liberdade sexual e de desafio à hipocrisia para um público mais amplo, composto por profissionais liberais, artistas e estudantes.21</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Coleções como Comentário: Uma Análise de Temas e Mensagens Chave</h4>
+            <p>A profundidade do projeto político da Daspu é mais bem compreendida através da análise de suas coleções temáticas. Cada lançamento não era apenas uma nova linha de roupas, mas um novo capítulo em seu manifesto contínuo, usando a linguagem da moda para comentar sobre questões sociais e políticas urgentes. A evolução das coleções demonstra uma estratégia de comunicação sofisticada e multifacetada.</p>
+            <p>Desde o início, a marca estruturou suas ofertas em linhas conceituais. A "Linha Batalha" era composta por peças como tops e vestidos, projetados para o trabalho diário das prostitutas, unindo funcionalidade e afirmação de identidade.20 A "Linha Ativismo", por sua vez, era explícita em sua mensagem, com peças que clamavam pela regulamentação da profissão e promoviam a conscientização sobre direitos humanos e saúde sexual.20 Essa segmentação inicial já revelava a dupla natureza da marca: servir à comunidade e, ao mesmo tempo, comunicar-se com a sociedade em geral.</p>
+            <p>Com o tempo, as coleções tornaram-se ainda mais elaboradas conceitualmente, funcionando como crônicas sociais. A coleção "As Cruzadas entre o Botão e a Espada" utilizou referências a uniformes militares para enquadrar a "batalha" diária das prostitutas como uma forma de guerra contra o preconceito e a violência, uma luta por respeito e sobrevivência.24 Já a coleção de verão 2010, intitulada "Da Farofa ao Caviar", celebrava a presença das prostitutas em todos os estratos sociais, da cultura popular ("farofa") à elite ("caviar"), desmantelando a ideia de que a prostituição é um fenômeno restrito a um único nicho social.26 Outra coleção notável foi a "Daspu na Copa", lançada em 2014, que criticava abertamente as ações repressivas do Estado contra as trabalhadoras do sexo durante a preparação para a Copa do Mundo, como o fechamento de bordéis e o aumento da perseguição policial.28</p>
+            <p>A tabela a seguir sistematiza algumas das principais coleções da Daspu, ilustrando a profundidade e a consistência de sua abordagem da moda como comentário político.</p>
+
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th class="px-6 py-3 text-left">Nome da Coleção/Linha (Ano)</th>
+                        <th class="px-6 py-3 text-left">Estética/Estilo Principal</th>
+                        <th class="px-6 py-3 text-left">Mensagem/Tema Político</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-6 py-4">Linhas Iniciais (2006)</td>
+                        <td class="px-6 py-4">Camisetas com slogans, tops e vestidos funcionais.</td>
+                        <td class="px-6 py-4">Linha Batalha: Roupas para o trabalho diário. Linha Ativismo: Demandas por regulamentação, direitos humanos e prevenção de DSTs/AIDS.20</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">Copa Sacana (2007-2008)</td>
+                        <td class="px-6 py-4">Cores vibrantes, referências ao futebol e ao universo do carnaval.</td>
+                        <td class="px-6 py-4">Apropriação do imaginário nacional (futebol) com um viés de liberdade sexual e crítica à hipocrisia em torno do sexo.30</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">As Cruzadas entre o Botão e a Espada</td>
+                        <td class="px-6 py-4">Referências a uniformes militares, elementos de guerra.</td>
+                        <td class="px-6 py-4">Enquadra a "batalha" (termo usado pelas prostitutas para o trabalho) como uma luta diária por respeito, direitos e sobrevivência contra o preconceito.24</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">Da Farofa ao Caviar (2009)</td>
+                        <td class="px-6 py-4">Roupas leves e divertidas, shorts coloridos, inspiradas na cultura de bar.</td>
+                        <td class="px-6 py-4">Afirma a presença e a relevância das prostitutas em todos os estratos sociais, do popular ao sofisticado, quebrando estereótipos de classe.26</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">Daspu na Copa (2014)</td>
+                        <td class="px-6 py-4">Temática esportiva com mensagens críticas.</td>
+                        <td class="px-6 py-4">Protesto contra a repressão estatal e a "higienização" das cidades que visava esconder as prostitutas durante a Copa do Mundo no Brasil.28</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">Zonas de Promiscuidade (2015)</td>
+                        <td class="px-6 py-4">Design colaborativo com foco em corpos diversos.</td>
+                        <td class="px-6 py-4">Exploração das fronteiras entre o público e o privado, o desejo e a norma, celebrando a diversidade de corpos e sexualidades.2</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h4 class="font-semibold text-foreground mt-8 mb-2">A Camiseta como Manifesto: Humor, Provocação e Slogans Políticos</h4>
+            <p>O produto mais icônico e eficaz da Daspu foi, sem dúvida, a camiseta.17 Simples, acessível e um veículo perfeito para mensagens diretas, a camiseta funcionou como um manifesto ambulante. A marca dominou a arte de criar slogans que eram, ao mesmo tempo, engraçados, sexualmente provocadores e politicamente afiados.</p>
+            <p>Frases como "Lubrifique" e "Mete pra dentro, seleção" (lançada durante a Copa do Mundo) usavam o duplo sentido para brincar com o imaginário sexual popular, ao mesmo tempo em que promoviam uma mensagem de sexo seguro e desafiavam a moralidade conservadora.21 Outra frase emblemática, "As mulheres boas vão para o céu, as mulheres más vão para qualquer lugar", subvertia um ditado popular para celebrar a liberdade e a autonomia feminina, questionando a dicotomia simplista entre a "santa" e a "puta".20</p>
+            <p>Esses slogans funcionavam em múltiplos níveis. Primeiro, eles geravam atenção midiática instantânea devido à sua natureza chocante e bem-humorada. Segundo, eles desarmavam potenciais críticos ao usar o humor como escudo, tornando difícil atacar a mensagem sem parecer puritano ou sem senso de humor. Terceiro, eles criavam um senso de comunidade e identidade entre aqueles que usavam as camisetas, transformando um simples ato de vestir em uma declaração de alinhamento político e cultural. A camiseta da Daspu não era apenas uma peça de roupa; era uma senha, um sinal de pertencimento a uma contracultura que desafiava a hipocrisia geral.3</p>
+
+            <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] mt-8 mb-4">Parte IV: A Passarela como Piquete - O Ativismo Performativo da Daspu</h3>
+            <p>A contribuição mais radical da Daspu para o ativismo talvez não tenha sido o que ela produziu, mas como ela o apresentou. A marca transformou o desfile de moda, o ápice do ritual da indústria, em uma forma de protesto público e teatro político. O objetivo principal desses eventos não era vender roupas para uma elite de compradores e editores de moda; era ocupar o espaço público, gerar um espetáculo midiático e transmitir uma mensagem política para a massa. As roupas eram, em essência, o figurino para uma performance de cidadania e resistência.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Para Além da Semana de Moda: A Estratégia dos Desfiles "Off-Circuit" e de Rua</h4>
+            <p>Desde o seu primeiro desfile na Praça Tiradentes, a Daspu fez uma escolha deliberada de apresentar suas coleções fora dos calendários oficiais do Fashion Rio e da São Paulo Fashion Week.10 Embora seus eventos fossem frequentemente agendados para coincidir com as semanas de moda, a fim de disputar a atenção da imprensa, a marca se recusou a entrar nos espaços exclusivos e controlados da indústria.24 Em vez disso, suas passarelas eram montadas em locais carregados de significado simbólico: as ruas do centro da cidade, quadras de escolas de samba e praças públicas.25</p>
+            <p>Essa estratégia "off-circuit" era fundamentalmente política. Ao levar a moda para a rua, a Daspu democratizou o desfile, tornando-o um evento acessível e aberto, em contraste direto com a exclusividade da alta moda. Essa escolha de local transformava o ato de desfilar em um ato de ocupação e reivindicação do espaço público, um espaço do qual as prostitutas são frequentemente expulsas ou no qual são violentadas. A rua, local de trabalho e de perigo, era ressignificada como palco de celebração e poder.</p>
+            <p>Esses eventos foram concebidos não como meros desfiles, mas como "desfiles-performance".2 Eles incorporavam elementos de teatro, música (frequentemente o funk carioca) e manifestação política, criando uma experiência que era tanto estética quanto visceralmente política.23 Eram acontecimentos projetados para a viralização, para gerar imagens e narrativas poderosas que seriam consumidas e disseminadas pela mídia de massa, amplificando a mensagem da marca muito além dos presentes.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Estudo de Caso: A Intervenção no MASP em 2019 - Confrontando a Onda Conservadora</h4>
+            <p>Um dos exemplos mais potentes do ativismo performativo da Daspu ocorreu em 26 de maio de 2019. Naquele dia, enquanto uma grande manifestação de apoiadores do então presidente Jair Bolsonaro tomava a Avenida Paulista, em São Paulo, a Daspu organizou um desfile-performance politizado no vão livre do Museu de Arte de São Paulo (MASP), um dos locais mais icônicos da cidade.2</p>
+            <p>O ato foi uma confrontação direta e deliberada. De um lado da avenida, bandeiras conservadoras, a defesa de uma moralidade tradicional e um discurso político hostil às minorias. Do outro, no palco improvisado do MASP, a Daspu celebrava a "promiscuidade de corpos", a diversidade de gênero e sexualidade e a afirmação da palavra "PUTA".5 Como afirmou a então curadora da marca, Elaine Bortolanza, a tensão com os "bolsominions" reativou as dicotomias fundadoras da marca — Daslu vs. Daspu, luxo-lixo, puta-santa — em um novo e urgente contexto político.5</p>
+            <p>O desfile foi o clímax de uma oficina de "Costuras Criativas", que reuniu ativistas, simpatizantes e pessoas interessadas na intersecção entre moda e política para criar coletivamente as peças.2 Essa abordagem participativa reforçou o caráter de movimento do evento, contrastando com a natureza hierárquica da moda tradicional. A intervenção no MASP demonstrou a notável capacidade da marca de se adaptar e responder aos desafios do cenário político contemporâneo, provando que sua relevância e sua coragem não haviam diminuído após a morte de sua fundadora. Foi um ato de resistência cultural que usou a visibilidade do confronto para reafirmar seus valores de liberdade e inclusão em face de uma onda conservadora crescente.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Política Corporificada: O Uso de Corpos Diversos e "Reais" na Passarela da Daspu</h4>
+            <p>A radicalidade política da Daspu também se manifestava em quem desfilava suas roupas. Em vez de modelos profissionais que se encaixam nos padrões restritos da indústria da moda, a passarela da Daspu era ocupada por um elenco deliberadamente diverso: as próprias prostitutas, ativistas, artistas, jornalistas, mulheres trans e pessoas com corpos de todas as formas, tamanhos e idades.24</p>
+            <p>Essa escolha de casting era uma declaração política poderosa. Em um de seus recursos mais emblemáticos, os desfiles misturavam prostitutas e não prostitutas, confundindo intencionalmente o público e o desafiando a confrontar seus próprios preconceitos.19 A pergunta implícita em cada desfile era: "Você consegue dizer quem é a puta?". Ao tornar impossível a distinção visual, a Daspu desmantelava a ideia da prostituta como um "outro" facilmente identificável e estigmatizável. A estratégia demonstrava, de forma performática, que as prostitutas não são uma categoria à parte, mas integram o tecido social, são mães, amigas e cidadãs como quaisquer outras mulheres.</p>
+            <p>Essa "política corporificada" era uma crítica direta à indústria da moda e seus padrões de beleza excludentes, ao mesmo tempo em que era uma tática eficaz de combate ao estigma. Ao apresentar corpos "reais" e diversos, a Daspu celebrava uma beleza inclusiva e afirmava que todas as mulheres, independentemente de sua profissão ou aparência, têm o direito de se sentirem belas, poderosas e orgulhosas de quem são. A passarela se tornava um espaço de utopia temporária, onde as hierarquias sociais e estéticas eram suspensas e uma comunidade diversa e solidária era tornada visível.4</p>
+
+            <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] mt-8 mb-4">Parte V: Legado e Evolução - A Daspu Após Gabriela Leite</h3>
+            <p>O verdadeiro teste para qualquer movimento ou marca centrada em uma figura carismática é sua capacidade de sobreviver e prosperar após a partida de seu fundador. A morte de Gabriela Leite em 2013 foi um golpe profundo, mas não o fim da linha para a Daspu ou para a luta que ela iniciou. O legado de seu trabalho provou ser resiliente, demonstrando que ela não havia criado apenas uma marca, mas um arcabouço cultural e político durável, capaz de ser habitado e adaptado por uma nova geração de ativistas. A Daspu se transformou de um projeto liderado por uma fundadora em um símbolo institucionalizado e uma plataforma para a ação coletiva, garantindo sua contínua relevância.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">Passando a Tocha: Continuidade e Mudança sob Nova Liderança</h4>
+            <p>Gabriela Leite faleceu em 10 de outubro de 2013, aos 62 anos, vítima de um câncer.6 Sua morte deixou um vácuo, mas também um movimento estruturado e uma marca com forte identidade. A continuidade do projeto foi assumida por uma nova geração de ativistas, notadamente a pesquisadora e psicóloga Elaine Bortolanza, que atuou como curadora e produtora da Daspu nos anos seguintes.2</p>
+            <p>Sob a nova liderança, a marca manteve seu núcleo ativista e sua tática de confronto, ao mesmo tempo em que se adaptava a um cenário político cada vez mais polarizado. O desfile-performance no MASP em 2019 é o exemplo mais claro dessa continuidade, mostrando que o espírito combativo de Gabriela permanecia vivo.5 A marca continuou a ser um "dispositivo cultural e artístico" na intersecção entre corpo, sexualidade, gênero e a luta por direitos.33</p>
+            <p>Paralelamente, a organização-mãe também evoluiu. A ONG Davida passou a operar como o "Coletivo Puta Davida", um nome que reflete tanto uma homenagem a uma expressão que Gabriela Leite defendia ("puta") quanto uma estrutura de liderança mais horizontal e coletiva, adequada à era pós-fundadora.34 Essa transição de uma ONG para um coletivo sugere uma maior resiliência organizacional e uma distribuição de responsabilidades que garante a sustentabilidade do movimento a longo prazo.</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">De Marca a Movimento Cultural: A Influência Duradoura na Arte, Teatro e Academia</h4>
+            <p>O impacto de Gabriela Leite e da Daspu transcendeu em muito o mundo da moda e do ativismo direto. Com o tempo, a marca e sua fundadora se tornaram objetos de estudo e fontes de inspiração em diversos campos culturais e acadêmicos, consolidando seu status como um importante fenômeno cultural brasileiro.</p>
+            <p>A história de vida de Gabriela foi imortalizada em sua autobiografia, "Filha, Mãe, Avó e Puta" (2009), uma obra que narra sua trajetória e se tornou uma referência para o movimento.3 Mais recentemente, seu legado foi levado aos palcos. Em 2024, estreou o espetáculo solo "Gabri", que resgata a memória da ativista e reflete sobre sua importância para a luta feminista e a liberdade sexual de todas as mulheres.36 A existência dessas obras demonstra que a história de Gabriela adquiriu vida própria, continuando a inspirar e provocar o debate público.</p>
+            <p>No campo acadêmico, a Daspu se tornou um caso de estudo fértil para pesquisadores de design, comunicação, sociologia e estudos de gênero. Teses e artigos analisam a marca como um exemplo de projeção de imagem na mídia, de ativismo político e de inclusão social, reconhecendo sua complexidade e importância teórica.1 A marca também é tema de podcasts e documentários, que ajudam a disseminar sua história para novos públicos e a solidificar seu lugar na memória cultural do país.33</p>
+
+            <h4 class="font-semibold text-foreground mt-4 mb-2">O Estado da Luta: A Relevância da Daspu no Brasil Contemporâneo</h4>
+            <p>O legado mais concreto do ativismo de Gabriela Leite e da Daspu pode ser visto no campo político e legislativo. Em reconhecimento à sua luta incansável pela regulamentação da profissão, o Projeto de Lei nº 4.211/2012, de autoria do então deputado federal Jean Wyllys, foi batizado de "Lei Gabriela Leite".32 O projeto, que visa regulamentar o trabalho sexual no Brasil, garantindo direitos trabalhistas e diferenciando-o da exploração sexual, é o resultado direto de décadas de articulação política do movimento que ela liderou.40 Embora o projeto ainda enfrente resistência no Congresso, sua existência é um testemunho da capacidade do movimento de pautar o debate legislativo em nível nacional.</p>
+            <p>A Daspu continua a funcionar como o braço cultural e a face pública da Rede Brasileira de Prostitutas (RBP), uma articulação nacional de associações e ativistas que defende os princípios da desestigmatização e do reconhecimento da prostituição como trabalho.2 A marca dá visibilidade e um apelo "pop" a uma agenda política complexa, traduzindo as reivindicações da RBP em uma linguagem visual e performática de grande alcance.</p>
+            <p>No Brasil contemporâneo, marcado por intensas disputas ideológicas e pelo avanço de pautas conservadoras que ameaçam os direitos sexuais e reprodutivos, a mensagem da Daspu permanece extraordinariamente relevante. Seu desafio à hipocrisia, sua defesa da autonomia corporal e sua celebração da diversidade são mais necessários do que nunca. A marca continua a ser um farol de resistência, lembrando à sociedade que a luta pela cidadania plena de todos os seus membros, incluindo os mais marginalizados, é uma batalha contínua.</p>
+
+            <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] mt-8 mb-4">Conclusão: Mais que Tecido - Tecendo uma Nova Narrativa para o Trabalho Sexual no Brasil</h3>
+            <p>A trajetória da Daspu e de sua fundadora, Gabriela Leite, representa um capítulo singular e transformador na história do ativismo social brasileiro. O que começou como uma necessidade pragmática de financiar uma ONG evoluiu para se tornar um sofisticado projeto de comunicação política que desafiou, com humor e audácia, as estruturas mais profundas do preconceito e da hipocrisia social. A Daspu é um estudo de caso exemplar de como as ferramentas da cultura de consumo podem ser subvertidas e transformadas em armas para a mudança social.</p>
+            <p>A jornada de Gabriela Leite, da academia da USP para as ruas da Boca do Lixo e, finalmente, para os palanques do ativismo nacional, forneceu a autenticidade e a visão estratégica que deram forma ao movimento. Sua recusa em aceitar a narrativa da vitimização e sua insistência em enquadrar a prostituição sob a ótica dos direitos civis e trabalhistas foram revolucionárias. A ONG Davida, e mais tarde o Coletivo Puta Davida, consolidou essa visão em uma plataforma organizada e resiliente, que sobreviveu à sua fundadora e continua a lutar por sua pauta.</p>
+            <p>A Daspu foi a manifestação mais visível e provocadora desse movimento. Através de um nome genial, uma estética de apropriação e desfiles performáticos que transformaram a passarela em piquete, a marca conseguiu o que décadas de ativismo tradicional talvez não tivessem alcançado: inseriu a voz e a perspectiva da "puta cidadã" no centro do debate nacional. Ela forçou a mídia, a academia e o público em geral a confrontar uma realidade que preferiam ignorar ou condenar, e o fez não com um discurso de lamentação, mas com uma celebração irreverente de identidade e resistência.</p>
+            <p>O legado da Daspu não está apenas nas roupas que produziu ou nos desfiles que realizou. Está na mudança de narrativa que ajudou a engendrar, na inspiração que forneceu a outras formas de ativismo e na prova de que a criatividade e a coragem podem ser as ferramentas mais poderosas na luta por dignidade. A Daspu demonstrou que a moda pode ser mais do que tecido e tendências; pode ser um veículo para tecer novas possibilidades sociais e para vestir uma causa com o poder inegável da visibilidade e do orgulho.</p>
+
+            <h4 class="font-semibold text-foreground mt-8 mb-2">Referências Citadas</h4>
+            <ul class="list-disc list-inside space-y-1 text-sm text-[var(--muted-foreground)]">
+              <li>O surgimento da marca Daspu e a projeção de sua imagem através ..., acessado em setembro 16, 2025, https://www.esdi.uerj.br/projetos/2573/o-surgimento-da-marca-daspu-e-a-projecao-de-sua-imagem-atraves-da-imprensa</li>
+              <li>DASPU - MASP | dudabreda, acessado em setembro 16, 2025, https://www.dudabreda.com/daspu-masp</li>
+              <li>Gabriela Leite - Homenageados - Revista Trip, acessado em setembro 16, 2025, https://revistatrip.uol.com.br/homenageados/gabriela-leite</li>
+              <li>Desfiles da grife Daspu rompe com imaginários hegemônicos da prostituição - Lampe, acessado em setembro 16, 2025, https://lampeppgcom.files.wordpress.com/2018/03/anacristinapronto.pdf</li>
+              <li>Daspu confronta pró-bolsonaros - Revista seLecT_ceLesTe, acessado em setembro 16, 2025, https://select.art.br/daspu-confronta-pro-bolsonaros/</li>
+              <li>Morre a fundadora da Daspu | Radar - VEJA - Assine Abril, acessado em setembro 16, 2025, https://veja.abril.com.br/coluna/radar/morre-a-fundadora-da-daspu/</li>
+              <li>“Diversidades” destaca Gabriela Leite e sua luta em defesa das prostitutas - Jornal da USP, acessado em setembro 16, 2025, https://jornal.usp.br/atualidades/diversidades-destaca-gabriela-leite-e-sua-luta-em-defesa-das-prostitutas/</li>
+              <li>Gabriela Leite (século XX) - Mulher 500 Anos, acessado em setembro 16, 2025, http://www.mulher500.org.br/gabriela-leite-seculo-xx/</li>
+              <li>Gabriela Leite – Wikipédia, a enciclopédia livre, acessado em setembro 16, 2025, https://pt.wikipedia.org/wiki/Gabriela_Leite</li>
+              <li>Daspu – Wikipédia, a enciclopédia livre, acessado em setembro 16, 2025, https://pt.wikipedia.org/wiki/Daspu</li>
+              <li>Gabriela Leite e mudanças nas práticas discursivas sobre prostituição no Brasil - SciELO, acessado em setembro 16, 2025, https://www.scielo.br/j/eh/a/tNPgbTRxyT6w93LGMhmHsSb/?format=html&lang=pt</li>
+              <li>Conheça a história do Coletivo Feminista de Luta contra a Aids Gabriela Leite, acessado em setembro 16, 2025, https://www.brasildefato.com.br/2023/03/08/conheca-a-historia-do-coletivo-feminista-de-luta-contra-a-aids-gabriela-leite/</li>
+              <li>Criadora da Daspu terá biografia | Arquivo - Jornal JÁ, acessado em setembro 16, 2025, https://www.jornalja.com.br/arquivo/criadora-da-daspu-tera-biografia/</li>
+              <li>O surgimento da marca Daspu e a projeção de sua imagem através da imprensa - ESDI, acessado em setembro 16, 2025, https://www.esdi.uerj.br/assets/578d56ab7eb521ba431b0c450f777742/2016333f7740d69c5aa99a453dbff006.pdf</li>
+              <li>Davida (NGO) - Wikipedia, acessado em setembro 16, 2025, https://en.wikipedia.org/wiki/Davida_(NGO)</li>
+              <li>Davida – Prostituição, Direitos Civis, Saúde - Fundo Brasil, acessado em setembro 16, 2025, https://www.fundobrasil.org.br/projeto/davida-prostituicao-direitos-civis-saude/</li>
+              <li>Daspu - Wikipedia, acessado em setembro 16, 2025, https://en.wikipedia.org/wiki/Daspu</li>
+              <li>Daspu, a palavra negada na revista Veja Maria Tereza Kersul Escola Superior de Propaganda e Marketing, São Paulo, SP. Resumo Os, acessado em setembro 16, 2025, http://www.intercom.org.br/papers/regionais/sudeste2008/resumos/R9-0167-1.pdf</li>
+              <li>Da boca do lixo à boca do luxo: o cosmopolitismo das prostitutas da ..., acessado em setembro 16, 2025, https://periodicos.ufjf.br/index.php/ipotesi/article/download/25729/14650/100599</li>
+              <li>Daslu versus Daspu. O que acontece afinal? - Guia da Semana, acessado em setembro 16, 2025, https://www.guiadasemana.com.br/compras/noticia/daslu-versus-daspu.-o-que-acontece-afinal</li>
+              <li>Daspu lança "putique", sua loja virtual - Rolling Stone Brasil, acessado em setembro 16, 2025, https://rollingstone.com.br/noticia/daspu-lanca-putique-sua-loja-virtual/</li>
+              <li>Daspu planeja abrir lojas próprias - Comércio e Serviços - iG Economia, acessado em setembro 16, 2025, https://economia.ig.com.br/empresas/comercioservicos/daspu-planeja-abrir-lojas-proprias/n1237846422475.html</li>
+              <li>Daspu: moda pra todo mundo | Mulher, Moda, Joias, Compras e ..., acessado em setembro 16, 2025, https://blogparatodas.wordpress.com/2012/06/29/daspu-moda-pra-todo-mundo/</li>
+              <li>A moda guerreira da Daspu - O TEMPO, acessado em setembro 16, 2025, https://www.otempo.com.br/entretenimento/magazine/a-moda-guerreira-da-daspu-1.296800</li>
+              <li>Daspu divide atenção do Fashion Rio e SPFW - Vírgula, acessado em setembro 16, 2025, https://virgula.me/modaebeleza/daspu-divide-atencao-do-fashion-rio-e-spfw/</li>
+              <li>Daspu lança coleção de verão no centro do Rio de Janeiro | Donna, acessado em setembro 16, 2025, https://gauchazh.clicrbs.com.br/donna/noticia/2009/08/daspu-lanca-colecao-de-verao-no-centro-do-rio-de-janeiro-cjpmztsnh00r1aqcneoezbroe.html</li>
+              <li>Daspu lança coleção de verão - Guia da Semana, acessado em setembro 16, 2025, https://www.guiadasemana.com.br/compras/noticia/daspu-lanca-colecao-de-verao</li>
+              <li>Brincadeira no gramado! Daspu cai de cabeça e lança linha de roupas para a Copa do Mundo - Heloisa Tolipan, acessado em setembro 16, 2025, https://heloisatolipan.com.br/moda/daspu-entra-de-cabeca-e-lanca-linha-de-roupas-especiais-para-copa-mundo/</li>
+              <li>Puta Dei – Community Mobilisation for the Rights of Sex Workers in Brazil, acessado em setembro 16, 2025, https://www.nswp.org/news/puta-dei-community-mobilisation-the-rights-sex-workers-brazil</li>
+              <li>Daspu: A Moda Sem Vergonha - Flavio Lenz | PDF | Prostituição | Brasil - Scribd, acessado em setembro 16, 2025, https://pt.scribd.com/document/398553410/Daspu-A-moda-sem-vergonha-Flavio-Lenz</li>
+              <li>Desfile DASPU em Rio de Janeiro - Sympla, acessado em setembro 16, 2025, https://www.sympla.com.br/evento/desfile-daspu/396087</li>
+              <li>Morre aos 62 anos a ex-prostituta Gabriela Leite, criadora da grife Daspu - GZH, acessado em setembro 16, 2025, https://gauchazh.clicrbs.com.br/geral/noticia/2013/10/morre-aos-62-anos-a-ex-prostituta-gabriela-leite-criadora-da-grife-daspu-4298385.html</li>
+              <li>a passarela de resistência da daspu - Apple Podcasts, acessado em setembro 16, 2025, https://podcasts.apple.com/us/podcast/a-passarela-de-resist%C3%AAncia-da-daspu/id1486711617?i=1000465522405</li>
+              <li>Coletivo Puta Davida - Fundo Brasil, acessado em setembro 16, 2025, https://www.fundobrasil.org.br/projeto/coletivo-puta-davida/</li>
+              <li>Puta Amada Brasil! - Revista Philos, acessado em setembro 16, 2025, https://revistaphilos.com/puta-amada-brasil/</li>
+              <li>Espetáculo "Gabri[ELAS]", baseado nas inquietações de Gabriela Leite, estreia, acessado em setembro 16, 2025, https://www.resenhando.com/2023/12/com-direcao-de-malu-bazan-solo.html</li>
+              <li>Fernanda Viacava resgata legado de Gabriela Leite em solo | VEJA SÃO PAULO, acessado em setembro 16, 2025, https://vejasp.abril.com.br/coluna/teatro/gabrielas-espetaculo-gabriela-leite-sp/</li>
+              <li>“Gabri[ELAS]”, solo teatral sobre a 1ª mulher a lutar pelos direitos das prostitutas no Brasil, acessado em setembro 16, 2025, https://www.sinergiacut.org.br/formacao/gabrielas-solo-teatral-sobre-a-1a-mulher-a-lutar-pelos-direitos-das-prostitutas-no-brasil</li>
+              <li>11/10/2013 - Morre Gabriela Leite, fundadora da Daspu e defensora das prostitutas, acessado em setembro 16, 2025, https://agenciapatriciagalvao.org.br/mulheres-de-olho/mulheres-de-olho-antigo/11102013-morre-gabriela-leite-fundadora-da-daspu-e-defensora-das-prostitutas/</li>
+              <li>Gabriela Leite histórias de uma puta feminista, acessado em setembro 16, 2025, https://repositorio.ufmg.br/server/api/core/bitstreams/6e3db5c0-2aa0-45fc-a8c3-478caab9bdd8/content</li>
+              <li>Carta de Princípios da RBP - Observatório da Prostituição - WordPress.com, acessado em setembro 16, 2025, https://observatoriodaprostituicao.wordpress.com/carta-de-principios-da-rbp/</li>
+            </ul>
+          </div>
+        </section>
+      `,
+      editor: `
+        <section>
+          <div class="max-w-4xl mx-auto">
+              <header class="text-center pb-8 mb-4">
+                  <h2 class="text-4xl font-bold font-serif">Minha Escrita: Estrutura Editável</h2>
+                  <p class="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">Use este espaço como o rascunho principal do seu TCC. Tudo o que você escrever aqui é **salvo automaticamente** no seu navegador. Respire fundo e comece a dar vida às suas ideias.</p>
+              </header>
+              <div class="bg-[var(--card-bg)] py-3 mb-8 border-b border-[var(--border)] rounded-lg shadow-md">
+                  <div id="status-bar" class="flex justify-center items-center space-x-4 text-sm text-[var(--muted-foreground)]">
+                      <span id="word-count">Contagem de palavras: 0</span>
+                      <span>|</span>
+                      <span id="save-status">Pronto para escrever!</span>
+                  </div>
+              </div>
+              <div id="editable-container" class="space-y-1 p-4 md:p-6 bg-[var(--card-bg)] rounded-xl shadow-md">
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left"><h3 id="editable-title-intro" class="editable-title font-serif text-2xl font-semibold text-[var(--foreground)]">1. INTRODUÇÃO</h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pt-2 pb-6"><div contenteditable="true" id="editable-content-intro" class="editable-section prose max-w-none"><p class="editable-placeholder">[Comece aqui a contextualizar o seu tema. Apresente a moda como ativismo e introduza o caso da Daspu. Siga o roteiro: Contextualização > Problema de Pesquisa > Justificativa > Objetivos > Estrutura do Trabalho.]</p></div></div></div></div>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left"><h3 id="editable-title-cap1" class="editable-title font-serif text-2xl font-semibold text-[var(--foreground)]">2. REFERENCIAL TEÓRICO</h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pt-2 pb-6"><div contenteditable="true" id="editable-content-cap1" class="editable-section prose max-w-none"><p class="editable-placeholder">[Desenvolva as ideias dos autores que você pesquisou. Crie uma narrativa que conecte os conceitos de estigma (Goffman), corpo político (Butler) e a moda como fenômeno social (Lipovetsky). Mostre como essas teorias preparam o terreno para a sua análise.]</p></div></div></div></div>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left"><h3 id="editable-title-cap2" class="editable-title font-serif text-2xl font-semibold text-[var(--foreground)]">3. METODOLOGIA</h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pt-2 pb-6"><div contenteditable="true" id="editable-content-cap2" class="editable-section prose max-w-none"><p class="editable-placeholder">[Descreva a "receita do bolo" da sua pesquisa. Explique que se trata de um estudo de caso, de abordagem qualitativa. Detalhe as fontes (pesquisa bibliográfica e análise documental das campanhas e do documentário da Daspu) e a técnica de análise (ex: análise de conteúdo).]</p></div></div></div></div>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left"><h3 id="editable-title-cap3" class="editable-title font-serif text-2xl font-semibold text-[var(--foreground)]">4. ANÁLISE E DISCUSSÃO</h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pt-2 pb-6"><div contenteditable="true" id="editable-content-cap3" class="editable-section prose max-w-none"><p class="editable-placeholder">[Este é o coração do seu trabalho. Apresente seus achados e os discuta, conectando-os com o referencial teórico. Ex: "A análise da campanha 'Puta Roupa' revelou o uso do humor... Isso dialoga com a teoria de Bakhtin sobre o poder do riso como ferramenta de subversão..."]</p></div></div></div></div>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-4 px-4 text-left"><h3 id="editable-title-conclusao" class="editable-title font-serif text-2xl font-semibold text-[var(--foreground)]">5. CONSIDERAÇÕES FINAIS</h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pt-2 pb-6"><div contenteditable="true" id="editable-content-conclusao" class="editable-section prose max-w-none"><p class="editable-placeholder">[Amarre todas as pontas. Retome sua pergunta de pesquisa, apresente sua conclusão principal, reconheça as limitações do seu estudo e, se possível, sugira caminhos para pesquisas futuras sobre o tema.]</p></div></div></div></div>
+              </div>
+          </div>
+        </section>
+      `,
+      estrutura: `
+        <section>
+          <div class="max-w-4xl mx-auto p-4 md:p-6 bg-[var(--card-bg)] rounded-xl shadow-md">
+            <header class="text-center pb-8 mb-12 border-b border-[var(--border)]">
+                <h2 class="text-4xl font-bold font-serif">Anatomia de um TCC</h2>
+                <p class="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">Pense no seu TCC como um corpo. Cada parte tem uma função vital. Vamos dissecar juntos cada órgão para você entender o papel de cada um e como eles trabalham em harmonia.</p>
+            </header>
+            <div class="space-y-1">
+                <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] pt-6">Elementos Pré-Textuais</h3><p class="text-[var(--muted-foreground)] -mt-2 pb-4">O "rosto" do seu trabalho, a primeira impressão que ele causa.</p>
+                ${['Capa', 'Folha de Rosto', 'Resumo', 'Sumário'].map((item, index) => `<div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">${index + 1}. ${item}<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2 space-y-4 text-[var(--muted-foreground)] text-base">${getEstruturaContent(item)}</div></div></div>`).join('')}
+                <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] pt-12">Elementos Textuais</h3><p class="text-[var(--muted-foreground)] -mt-2 pb-4">O coração e a alma do seu trabalho, onde sua pesquisa ganha vida.</p>
+                ${['Introdução', 'Revisão de Literatura', 'Metodologia', 'Resultados e Discussão', 'Considerações Finais'].map((item, index) => `<div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">${index + 5}. ${item}<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2 space-y-4 text-[var(--muted-foreground)] text-base">${getEstruturaContent(item)}</div></div></div>`).join('')}
+                <h3 class="font-serif text-3xl font-semibold text-[var(--foreground)] pt-12">Elementos Pós-Textuais</h3><p class="text-[var(--muted-foreground)] -mt-2 pb-4">Os créditos finais e materiais de apoio.</p>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">10. Referências<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2 space-y-4 text-[var(--muted-foreground)] text-base">${getEstruturaContent('Referências')}</div></div></div>
+            </div>
+          </div>
+        </section>`,
+      abnt: `
+        <section>
+          <div class="max-w-4xl mx-auto p-4 md:p-6 bg-[var(--card-bg)] rounded-xl shadow-md">
+            <header class="text-center pb-8 mb-12 border-b border-[var(--border)]">
+                <h2 class="text-4xl font-bold font-serif">Guia Definitivo da ABNT</h2>
+                <p class="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">Respire fundo! A ABNT não é um monstro. É apenas um conjunto de regras para deixar seu trabalho claro, profissional e padronizado. Vamos passar por cada parte do TCC, passo a passo.</p>
+            </header>
+             <div class="space-y-1">
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">1. Formatação Geral (A Base de Tudo)<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2 space-y-6 text-[var(--muted-foreground)]">${getAbntContent('formatacao')}</div></div></div>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">2. Normas para Cada Seção do TCC<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2 space-y-6 text-[var(--muted-foreground)]">${getAbntContent('secoes')}</div></div></div>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">3. Citações no Texto<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2 space-y-6 text-[var(--muted-foreground)]">${getAbntContent('citacoes')}</div></div></div>
+                <div class="accordion-item border-b border-[var(--border)]"><button class="accordion-toggle w-full flex justify-between items-center py-5 px-4 text-left text-xl font-serif">4. Lista de Referências<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon transition-transform duration-300 text-[var(--muted-foreground)]"><path d="m6 9 6 6 6-9"/></svg></button><div class="accordion-content"><div class="pb-6 pt-2 space-y-6 text-[var(--muted-foreground)]">${getAbntContent('referencias')}</div></div></div>
+            </div>
+          </div>
+        </section>
+        `
+    };
+    
+    // --- SCRIPT LOGIC ---
+    const tabOrder = [
+      { id: "estrutura", label: "Estrutura", icon: "📖" },
+      { id: "abnt", label: "ABNT", icon: "📐" },
+      { id: "editor", label: "Minha Escrita", icon: "✍️" },
+      { id: "checklist", label: "Checklist do TCC", icon: "✅" },
+      { id: "dossie", label: "Dossiê Daspu", icon: "👠" },
+    ];
+    
+    const tabsEl = document.getElementById("tabs");
+    const contentEl = document.getElementById("content");
+
+    tabOrder.forEach((tab, i) => {
+      const btn = document.createElement("button");
+      btn.id = `${tab.id}-tab`;
+      btn.className = "tab-button text-[var(--muted-foreground)] font-medium py-2 px-1";
+      if (i === 0) btn.classList.add("tab-active");
+      btn.innerHTML = `<span>${tab.label}</span>`;
+      btn.onclick = () => showTab(tab.id);
+      tabsEl.appendChild(btn);
+    });
+    
+    function showTab(tabId) {
+      document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("tab-active"));
+      document.getElementById(`${tabId}-tab`).classList.add("tab-active");
+      // Limpa o conteúdo anterior para evitar duplicação de event listeners
+      contentEl.innerHTML = ''; 
+      
+      // Insere o novo conteúdo
+      const newContent = document.createElement('div');
+      newContent.innerHTML = tabContents[tabId];
+      contentEl.appendChild(newContent);
+      
+      if (tabId === 'checklist') {
+        renderChecklist();
+        loadChecklistState();
+      }
+      if (tabId === 'editor') {
+        initEditor();
+      }
+    }
+
+    function renderChecklist() {
+        for (const fase in checklistItems) {
+            const container = document.getElementById(`checklist-${fase}`);
+            if (container) {
+                // Limpa o container antes de adicionar novos itens
+                container.innerHTML = '';
+                checklistItems[fase].forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'checklist-item';
+                    const labelClass = item.special ? 'font-bold text-green-600' : 'text-[var(--foreground)]';
+                    const accentClass = item.special ? 'accent-green-500' : 'accent-blue-500';
+                    li.innerHTML = `
+                        <label class="flex items-center text-lg ${labelClass}">
+                            <input type="checkbox" id="${item.id}" class="h-5 w-5 rounded-md border-gray-300 bg-transparent focus:ring-offset-0 focus:ring-2 focus:ring-blue-600 mr-4 ${accentClass}">
+                            ${item.text}
+                        </label>`;
+                    container.appendChild(li);
+                });
+            }
+        }
+    }
+
+    function saveChecklistState() {
+        const state = {};
+        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+            state[checkbox.id] = checkbox.checked;
+        });
+        localStorage.setItem('tccChecklistState', JSON.stringify(state));
+    }
+
+    function loadChecklistState() {
+        const savedState = localStorage.getItem('tccChecklistState');
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            for (const id in state) {
+                const checkbox = document.getElementById(id);
+                if (checkbox) {
+                    checkbox.checked = state[id];
+                }
+            }
+        }
+    }
+
+    function initEditor() {
+        const container = document.getElementById('editable-container');
+        if (!container) return;
+
+        const editableSections = container.querySelectorAll('[contenteditable="true"]');
+        const wordCountEl = document.getElementById('word-count');
+        const saveStatusEl = document.getElementById('save-status');
+        let saveTimeout;
+
+        function updateWordCount() {
+            let totalWords = 0;
+            const mainContent = [
+                document.getElementById('editable-content-intro'),
+                document.getElementById('editable-content-cap1'),
+                document.getElementById('editable-content-cap2'),
+                document.getElementById('editable-content-cap3'),
+                document.getElementById('editable-content-conclusao'),
+            ];
+            mainContent.forEach(el => {
+                if (el) {
+                    const placeholder = el.querySelector('.editable-placeholder');
+                    const text = el.innerText || el.textContent;
+
+                    if (placeholder && text.trim() === placeholder.innerText.trim()) {
+                        // Não faz nada, contagem para esta seção é 0
+                    } else {
+                        const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+                        totalWords += words.length;
+                    }
+                }
+            });
+            wordCountEl.textContent = `Contagem de palavras: ${totalWords}`;
+        }
+        
+        function saveContent() {
+            saveStatusEl.textContent = 'Salvando...';
+            editableSections.forEach(el => {
+                if (el.id) {
+                    localStorage.setItem(el.id, el.innerHTML);
+                }
+            });
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                saveStatusEl.textContent = 'Salvo!';
+            }, 500);
+        }
+
+        function loadContent() {
+            editableSections.forEach(el => {
+                if (el.id) {
+                    const savedContent = localStorage.getItem(el.id);
+                    if (savedContent) {
+                        el.innerHTML = savedContent;
+                    }
+                }
+                const placeholder = el.querySelector('.editable-placeholder');
+                if(placeholder) {
+                    el.addEventListener('focus', () => {
+                        const currentPlaceholder = el.querySelector('.editable-placeholder');
+                        if (currentPlaceholder) {
+                            el.innerHTML = '<p><br></p>';
+                        }
+                    });
+                    el.addEventListener('blur', () => {
+                        if (el.innerText.trim() === '') {
+                           el.innerHTML = `<p class="editable-placeholder">${placeholder.innerText}</p>`;
+                        }
+                    });
+                }
+            });
+            updateWordCount();
+        }
+        
+        container.addEventListener('input', () => {
+            saveContent();
+            updateWordCount();
+        });
+
+        loadContent();
+    }
+
+    showTab("estrutura");
+
+    document.addEventListener("click", e => {
+      if (e.target.closest(".accordion-toggle")) {
+        const item = e.target.closest(".accordion-item");
+        item.classList.toggle("active");
+        return;
+      }
+    });
+    
+    document.addEventListener('change', e => {
+        if (e.target.matches('.checklist-item input[type="checkbox"]')) {
+            saveChecklistState();
+        }
+    });
+
+  </script>
+</body>
+</html>
